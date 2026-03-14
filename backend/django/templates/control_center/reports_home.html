@@ -1,0 +1,93 @@
+{% extends "control_center/base_control.html" %}
+{% block title %}Reports | Control Centre{% endblock %}
+
+{% block cc_content %}
+<div class="cc-wrap">
+
+  <div class="cc-card p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h3 class="mb-1" style="color:#0f5132;">Results & Reports</h3>
+        <div class="text-muted">Official election summary for school authority.</div>
+      </div>
+      <a href="{% url 'control_center:dashboard_home' %}" class="btn btn-outline-success rounded-pill px-3">
+        Back
+      </a>
+    </div>
+  </div>
+
+  {% if not election %}
+    <div class="cc-card p-4">
+      <div class="text-muted">No election found.</div>
+    </div>
+  {% else %}
+
+    <div class="cc-card p-4 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+          <div class="fw-semibold" style="font-size:18px;">{{ election.title }}</div>
+          <div class="text-muted">Phase: <span class="fw-semibold">{{ phase }}</span></div>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <span class="badge text-bg-light border">Voters: {{ total_voters }}</span>
+          <span class="badge text-bg-light border">Votes: {{ votes_cast }}</span>
+          <span class="badge text-bg-light border">Turnout: {{ turnout }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <div class="cc-card p-4">
+          <div class="fw-semibold mb-1" style="color:#0f5132;">Election Outcome</div>
+
+          {% if votes_cast == 0 %}
+            <div class="text-muted">No votes were recorded for this election.</div>
+          {% elif is_tie %}
+            <div class="text-muted">Result is currently a <span class="fw-semibold">Tie</span> between top parties.</div>
+          {% elif winner_party %}
+            <div style="font-size:20px;" class="fw-bold">
+              Winning Party: <span style="color:#0f5132;">{{ winner_party.name }}</span>
+            </div>
+            <div class="text-muted">Winner calculated from highest party vote count.</div>
+          {% else %}
+            <div class="text-muted">Winner not available.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-card p-0 overflow-hidden">
+      <div class="p-4 border-bottom">
+        <div class="fw-semibold" style="color:#0f5132;">Party-wise Vote Count</div>
+        <div class="text-muted small">Use this table for official reporting and verification.</div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Party</th>
+              <th class="text-end">Votes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in party_counts %}
+              <tr>
+                <td class="fw-semibold">{{ p.party__name }}</td>
+                <td class="text-end fw-bold">{{ p.total }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="2" class="text-center text-muted p-4">No results available yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  {% endif %}
+</div>
+{% endblock %}

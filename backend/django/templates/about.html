@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About | School Election Voting System{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+
+    <div class="p-4 p-lg-5 rounded-4 shadow-sm bg-white mb-4">
+      <div class="row align-items-center g-4">
+        <div class="col-12 col-lg-7">
+          <span class="badge rounded-pill text-bg-success-subtle border border-success-subtle px-3 py-2 mb-3">
+            Learn More
+          </span>
+
+          <h1 class="display-6 fw-semibold mb-2">
+            A simple, secure, and student-friendly election experience
+          </h1>
+
+          <p class="lead text-secondary mb-4">
+            This system helps schools conduct elections smoothly — from candidate registration to voting and results —
+            with clear guidance at every stage.
+          </p>
+
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-success btn-lg rounded-pill px-4" href="{% url 'login' %}?next={% url 'elections:status' %}">
+              Get Started
+            </a>
+            <a class="btn btn-outline-success btn-lg rounded-pill px-4" href="{% url 'elections:status' %}">
+              View Election Hub
+            </a>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">Role-Based Access</span>
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">Audit-Friendly</span>
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">Party-Based Voting</span>
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">Fast Results</span>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-5">
+          <div class="rounded-4 p-4 border bg-light">
+            <h5 class="fw-semibold mb-3">How it works</h5>
+            <div class="d-grid gap-3">
+              <div class="p-3 rounded-4 bg-white border">
+                <div class="fw-semibold">1) Candidate Registration</div>
+                <div class="text-secondary small">Students apply with details & manifesto for approval.</div>
+              </div>
+              <div class="p-3 rounded-4 bg-white border">
+                <div class="fw-semibold">2) Voting</div>
+                <div class="text-secondary small">Voters cast their vote during the official window.</div>
+              </div>
+              <div class="p-3 rounded-4 bg-white border">
+                <div class="fw-semibold">3) Results</div>
+                <div class="text-secondary small">Results are published after voting ends.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <div class="col-12 col-lg-4">
+        <div class="p-4 rounded-4 shadow-sm bg-white h-100">
+          <h5 class="fw-semibold mb-2">Guided Election Hub</h5>
+          <p class="text-secondary mb-0">
+            A single dashboard that shows what’s open right now and what actions are available — no clutter, no confusion.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="p-4 rounded-4 shadow-sm bg-white h-100">
+          <h5 class="fw-semibold mb-2">One Account, Two Modes</h5>
+          <p class="text-secondary mb-0">
+            Login once. Then choose how you want to participate: continue as a Candidate or continue as a Voter.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="p-4 rounded-4 shadow-sm bg-white h-100">
+          <h5 class="fw-semibold mb-2">Reliable & Transparent</h5>
+          <p class="text-secondary mb-0">
+            Built for fairness: controlled election phases, clear rules, and results published only after voting ends.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-4 p-lg-5 rounded-4 shadow-sm bg-white">
+      <h4 class="fw-semibold mb-3">Participation roles</h4>
+      <p class="text-secondary mb-4">
+        Everyone signs in the same way. What you can do depends on the current election phase and your chosen mode.
+      </p>
+
+      <div class="row g-4">
+        <div class="col-12 col-lg-4">
+          <div class="p-4 rounded-4 border bg-light h-100">
+            <span class="badge rounded-pill text-bg-success-subtle border border-success-subtle px-3 py-2">Candidate</span>
+            <h6 class="fw-semibold mt-3 mb-2">Apply & submit manifesto</h6>
+            <p class="text-secondary mb-0 small">
+              During registration, candidates submit details for approval. After approval, they appear for voters.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="p-4 rounded-4 border bg-light h-100">
+            <span class="badge rounded-pill text-bg-success-subtle border border-success-subtle px-3 py-2">Voter</span>
+            <h6 class="fw-semibold mt-3 mb-2">Vote during the window</h6>
+            <p class="text-secondary mb-0 small">
+              Voting is enabled only during the voting phase. Each voter can vote once (party-based voting).
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="p-4 rounded-4 border bg-light h-100">
+            <span class="badge rounded-pill text-bg-success-subtle border border-success-subtle px-3 py-2">Admin</span>
+            <h6 class="fw-semibold mt-3 mb-2">Create & control phases</h6>
+            <p class="text-secondary mb-0 small">
+              Admin schedules elections, approves candidates, and ensures the process moves smoothly through phases.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      
+      <hr class="my-4">
+
+      <div class="d-flex flex-wrap gap-2 justify-content-end">
+        <a class="btn btn-outline-success rounded-pill px-4" href="{% url 'home' %}">
+          Back to Home
+        </a>
+        <a class="btn btn-success rounded-pill px-4" href="{% url 'login' %}?next={% url 'elections:status' %}">
+          Sign in
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

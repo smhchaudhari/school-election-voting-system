@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Results • GreenVote{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+  <div>
+    <h1 class="h4 fw-bold mb-1">Results</h1>
+    <div class="text-muted">Select an election to view results.</div>
+  </div>
+</div>
+
+<div class="row g-3">
+  {% for election in elections %}
+    <div class="col-md-6 col-lg-7">
+      <div class="card app-card h-100">
+        <div class="card-body p-4">
+          <div class="fw-bold">{{ election.title }}</div>
+          <div class="small text-muted">Election #{{ election.id }}</div>
+
+          <div class="mt-3">
+            <a class="btn btn-brand rounded-pill px-3"
+               href="{% url 'results:results' election.id %}">
+              View Results
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <div class="card app-card">
+        <div class="card-body p-4 text-center">
+          <div class="display-6">📊</div>
+          <div class="fw-bold mt-2">No elections found</div>
+          <div class="text-muted small">Ask admin to create an election first.</div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

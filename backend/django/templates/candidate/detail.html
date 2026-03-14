@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-4 text-center">
+
+                    {% if candidate.photo %}
+                        <img src="{{ candidate.photo.url }}" 
+                             class="img-fluid rounded"
+                             style="max-height:250px;">
+                    {% else %}
+                        <p>No Photo</p>
+                    {% endif %}
+
+                </div>
+
+                <div class="col-md-8">
+
+                    <h3>{{ candidate.user.username }}</h3>
+
+                    <p><strong>Party:</strong> {{ candidate.party.name }}</p>
+
+                    <p><strong>Class:</strong> {{ candidate.class_name }} - {{ candidate.section }}</p>
+
+                    <hr>
+
+                    <h5>Manifesto</h5>
+
+                    <p>{{ candidate.manifesto }}</p>
+
+                    <a href="{% url 'candidate:list' %}" 
+                       class="btn btn-secondary">
+                       Back to Candidates
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

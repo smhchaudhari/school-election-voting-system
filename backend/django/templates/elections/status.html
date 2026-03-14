@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Election Status{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+
+    
+    {% if phase %}
+      {% with phase_value=phase %}
+        {% include "elections/_status_body.html" %}
+      {% endwith %}
+    {% else %}
+      {% with phase_value="NO_ELECTION" %}
+        {% include "elections/_status_body.html" %}
+      {% endwith %}
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

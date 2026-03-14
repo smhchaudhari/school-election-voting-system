@@ -1,0 +1,75 @@
+{% extends "control_center/base_control.html" %}
+{% block title %}Voters | Control Centre{% endblock %}
+
+{% block cc_content %}
+<div class="cc-wrap">
+
+  <div class="cc-card p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h3 class="mb-1" style="color:#0f5132;">Voters</h3>
+        <div class="text-muted">Search and filter voters by class and section.</div>
+      </div>
+      <span class="badge text-bg-light border">Total: {{ total }}</span>
+    </div>
+  </div>
+
+  <div class="cc-card p-4 mb-4">
+    <form class="row g-2 align-items-end" method="get">
+      <div class="col-12 col-md-5">
+        <label class="form-label small text-muted">Search (username / roll no.)</label>
+        <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Search voter...">
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label small text-muted">Class</label>
+        <input type="text" name="class" value="{{ class_name }}" class="form-control" placeholder="e.g., 9">
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label small text-muted">Section</label>
+        <input type="text" name="section" value="{{ section }}" class="form-control" placeholder="e.g., A">
+      </div>
+      <div class="col-12 col-md-2 d-grid">
+        <button class="btn btn-success" type="submit">Apply</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="cc-card p-0 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Username</th>
+            <th>Roll No.</th>
+            <th>Class</th>
+            <th>Section</th>
+            <th class="text-end">Voted</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for v in voters %}
+            <tr>
+              <td class="fw-semibold">{{ v.user.username }}</td>
+              <td>{{ v.roll_number }}</td>
+              <td>{{ v.class_name }}</td>
+              <td>{{ v.section }}</td>
+              <td class="text-end">
+                {% if v.has_voted %}
+                  <span class="badge text-bg-success">Yes</span>
+                {% else %}
+                  <span class="badge text-bg-secondary">No</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-muted p-4">No voters found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

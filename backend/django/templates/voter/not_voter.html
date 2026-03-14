@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Not Allowed{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded shadow-sm p-4">
+  <h3>{{ election.title }}</h3>
+  <div class="alert alert-danger mt-3">
+    You are not allowed to vote. Only registered voters can vote.
+  </div>
+</div>
+{% endblock %}

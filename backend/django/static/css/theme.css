@@ -1,0 +1,152 @@
+
+:root {
+  --gv-900: #0b2e13;
+  --gv-800: #0f3d1a;
+  --gv-700: #145a23;
+  --gv-600: #1b7a2f;
+  --gv-500: #22a244;
+  --gv-400: #35c759;
+  --gv-300: #68e17a;
+  --gv-200: #bff4c8;
+  --gv-100: #e9fbea;
+
+  --gv-shadow: 0 12px 30px rgba(16, 24, 16, 0.08);
+}
+
+
+* {
+  font-family: "Nunito", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+body.app-bg {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(34,162,68,0.18), transparent 60%),
+    radial-gradient(900px 500px at 85% 0%, rgba(104,225,122,0.16), transparent 65%),
+    linear-gradient(180deg, #ffffff, #f7fbf8);
+}
+
+
+.app-nav {
+  background: linear-gradient(90deg, var(--gv-800), var(--gv-600));
+}
+
+.navbar .nav-link {
+  color: rgba(255,255,255,0.85);
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--gv-300);
+  box-shadow: 0 0 0 6px rgba(191,244,200,0.25);
+}
+
+
+.app-card {
+  border: 1px solid rgba(15, 90, 35, 0.12);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--gv-shadow);
+}
+
+.app-card:hover {
+  transform: translateY(-1px);
+}
+
+
+.btn-brand {
+  background: linear-gradient(90deg, var(--gv-600), var(--gv-500));
+  border: 0;
+  color: #fff;
+  box-shadow: 0 10px 18px rgba(34,162,68,0.25);
+}
+
+.btn-brand:hover {
+  filter: brightness(0.97);
+  color: #fff;
+}
+
+
+.app-badge {
+  background: rgba(191,244,200,0.45);
+  border: 1px solid rgba(15, 90, 35, 0.25);
+  color: var(--gv-900);
+}
+
+
+.msg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--gv-500);
+  flex-shrink: 0;
+}
+
+
+.vote-card {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 90, 35, 0.12);
+  background: #fff;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vote-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--gv-shadow);
+}
+
+.vote-card input {
+  margin-top: 6px;
+}
+
+
+.table {
+  --bs-table-striped-bg: rgba(233, 251, 234, 0.55);
+}
+
+.table thead th {
+  color: var(--gv-700);
+  font-weight: 700;
+  border-bottom: 2px solid rgba(15, 90, 35, 0.25);
+}
+
+
+footer {
+  border-top: 1px solid rgba(15, 90, 35, 0.12);
+  background: rgba(255,255,255,0.7);
+}
+
+.hero-illustration{
+  background: rgba(233, 251, 234, 0.65);
+  border: 1px solid rgba(15, 90, 35, 0.12);
+  border-radius: 24px;
+  box-shadow: var(--gv-shadow);
+}
+
+.step-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  border-radius: 12px;
+  background: rgba(191,244,200,0.8);
+  border: 1px solid rgba(15, 90, 35, 0.18);
+  color: var(--gv-900);
+  font-weight: 800;
+}

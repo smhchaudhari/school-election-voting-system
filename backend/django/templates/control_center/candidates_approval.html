@@ -1,0 +1,113 @@
+{% extends "control_center/base_control.html" %}
+{% block title %}Candidates | Control Centre{% endblock %}
+
+{% block cc_content %}
+<div class="cc-wrap">
+
+  <div class="cc-card p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h3 class="mb-1" style="color:#0f5132;">Candidates Approval</h3>
+        <div class="text-muted">Review, filter and approve candidates for the election.</div>
+      </div>
+      <div class="d-flex gap-2 align-items-center">
+        <span class="badge text-bg-light border">Total: {{ total }}</span>
+        <span class="badge text-bg-warning border">Pending: {{ pending_total }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc-card p-4 mb-4">
+    <form class="row g-2 align-items-end" method="get">
+      <div class="col-12 col-md-5">
+        <label class="form-label small text-muted">Search (username / party)</label>
+        <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Search candidate...">
+      </div>
+
+      <div class="col-6 col-md-2">
+        <label class="form-label small text-muted">Class</label>
+        <input type="text" name="class" value="{{ class_name }}" class="form-control" placeholder="e.g., 9">
+      </div>
+
+      <div class="col-6 col-md-2">
+        <label class="form-label small text-muted">Section</label>
+        <input type="text" name="section" value="{{ section }}" class="form-control" placeholder="e.g., A">
+      </div>
+
+      <div class="col-12 col-md-2">
+        <label class="form-label small text-muted">Status</label>
+        <select name="status" class="form-select">
+          <option value="" {% if status == "" %}selected{% endif %}>All</option>
+          <option value="pending" {% if status == "pending" %}selected{% endif %}>Pending</option>
+          <option value="approved" {% if status == "approved" %}selected{% endif %}>Approved</option>
+        </select>
+      </div>
+
+      <div class="col-12 col-md-1 d-grid">
+        <button class="btn btn-success" type="submit">Go</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="cc-card p-0 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Candidate</th>
+            <th>Party</th>
+            <th>Class</th>
+            <th>Section</th>
+            <th>Slot</th>
+            <th>Status</th>
+            <th class="text-end">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for c in candidates %}
+            <tr>
+              <td class="fw-semibold">{{ c.user.username }}</td>
+              <td>{{ c.party.name }}</td>
+              <td>{{ c.class_name }}</td>
+              <td>{{ c.section }}</td>
+              <td>{{ c.get_slot_display }}</td>
+              <td>
+                {% if c.approved %}
+                  <span class="badge text-bg-success">Approved</span>
+                {% else %}
+                  <span class="badge text-bg-warning">Pending</span>
+                {% endif %}
+              </td>
+              <td class="text-end">
+                <form method="post" class="d-inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="candidate_id" value="{{ c.id }}">
+
+                  {% if c.approved %}
+                    <input type="hidden" name="action" value="unapprove">
+                    <button type="submit" class="btn btn-outline-warning btn-sm rounded-pill px-3">
+                      Unapprove
+                    </button>
+                  {% else %}
+                    <input type="hidden" name="action" value="approve">
+                    <button type="submit" class="btn btn-success btn-sm rounded-pill px-3">
+                      Approve
+                    </button>
+                  {% endif %}
+                </form>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="text-center text-muted p-4">No candidates found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

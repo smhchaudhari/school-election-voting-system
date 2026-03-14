@@ -1,0 +1,129 @@
+{% extends "control_center/base_control.html" %}
+{% block title %}Parties | Control Centre{% endblock %}
+
+{% block cc_content %}
+<div class="cc-wrap">
+
+  <div class="cc-card p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h3 class="mb-1" style="color:#0f5132;">Parties</h3>
+        <div class="text-muted">
+          Manage party list for the <span class="fw-semibold">active election</span>.
+        </div>
+      </div>
+      <a href="{% url 'control_center:dashboard_home' %}" class="btn btn-outline-success rounded-pill px-3">
+        Back
+      </a>
+    </div>
+  </div>
+
+  {% if not election %}
+    <div class="cc-card p-4">
+      <div class="text-muted">
+        No active election selected. Please go to <span class="fw-semibold">Election Management</span> and set an election as active.
+      </div>
+      <div class="mt-3">
+        <a href="{% url 'control_center:election_manage' %}" class="btn btn-success rounded-pill px-4">
+          Go to Election Management
+        </a>
+      </div>
+    </div>
+  {% else %}
+
+    <div class="cc-card p-4 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+          <div class="fw-semibold" style="font-size:18px;">
+            Managing Parties For:
+            <span style="color:#0f5132;">{{ election.title }}</span>
+            <span class="badge text-bg-success ms-2">Active</span>
+          </div>
+          <div class="text-muted">
+            Phase: <span class="fw-semibold">{{ phase }}</span>
+          </div>
+        </div>
+        <span class="badge text-bg-light border">Total Parties: {{ total }}</span>
+      </div>
+    </div>
+
+    <div class="cc-card p-4 mb-4">
+      <div class="fw-semibold mb-2" style="color:#0f5132;">
+        Add Party to: {{ election.title }}
+      </div>
+
+      <form method="post" class="row g-2 align-items-end">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add">
+
+        <div class="col-12 col-md-7">
+          <label class="form-label small text-muted">Party Name</label>
+          <input type="text" name="name" class="form-control" placeholder="e.g., Green Warriors" required>
+        </div>
+
+        <div class="col-12 col-md-3">
+          <label class="form-label small text-muted">Color (optional)</label>
+          <input type="text" name="color" class="form-control" placeholder="#198754">
+        </div>
+
+        <div class="col-12 col-md-2 d-grid">
+          <button type="submit" class="btn btn-success rounded-pill">Add</button>
+        </div>
+      </form>
+
+      <div class="text-muted small mt-2">
+        Tip: Color is optional. You can use hex like <span class="fw-semibold">#198754</span>.
+      </div>
+    </div>
+
+    <div class="cc-card p-0 overflow-hidden">
+      <div class="p-4 border-bottom">
+        <div class="fw-semibold" style="color:#0f5132;">Parties in {{ election.title }}</div>
+        <div class="text-muted small">These parties will be available for candidates and voting in this election.</div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Party</th>
+              <th>Color</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in parties %}
+              <tr>
+                <td class="fw-semibold">{{ p.name }}</td>
+                <td>
+                  {% if p.color %}
+                    <span class="badge text-bg-light border">{{ p.color }}</span>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+                <td class="text-end">
+                  <form method="post" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="party_id" value="{{ p.id }}">
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                            onclick="return confirm('Delete this party? This may affect candidates and voting.');">
+                      Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="3" class="text-center text-muted p-4">No parties added yet for this election.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Access Denied | GreenVote{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 720px;">
+    <div class="card-body p-4 p-md-5">
+      <h1 class="h4 mb-2" style="color:#0f5132;">Access Denied</h1>
+      <p class="text-muted mb-4">
+        You don’t have permission to open the <b>Control Centre</b>.
+        This area is only for School Authority / Admin.
+      </p>
+
+      <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'elections:status' %}" class="btn btn-success rounded-pill px-4">
+          Go to Election Hub
+        </a>
+        <a href="{% url 'login' %}" class="btn btn-outline-success rounded-pill px-4">
+          Login with Admin Account
+        </a>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="small text-muted">
+        If you believe this is a mistake, contact your school administrator.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

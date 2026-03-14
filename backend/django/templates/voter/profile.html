@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Voter Profile{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+
+          <div class="text-center mb-4">
+            <h3 class="fw-semibold">Complete Your Voter Profile</h3>
+            <p class="text-muted">
+              Before casting your vote, please enter your student details.
+            </p>
+          </div>
+
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label">Roll Number</label>
+              {{ form.roll_number }}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Class</label>
+              {{ form.class_name }}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Section</label>
+              {{ form.section }}
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-success btn-lg">
+                Save & Continue to Voting
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

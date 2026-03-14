@@ -1,0 +1,1 @@
+web: gunicorn school_voting_system.wsgi:application

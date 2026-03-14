@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Candidate Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:980px;">
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+      <div class="small text-success-emphasis">Candidate</div>
+      <h1 class="h3 fw-semibold mb-1">Dashboard</h1>
+      <div class="text-muted">Update your details and check approval status.</div>
+    </div>
+    <a class="btn btn-outline-success" href="{% url 'status' %}">Back to Status</a>
+  </div>
+
+  <div class="card shadow-sm border-0" style="border-radius:20px;">
+    <div class="card-body p-4">
+
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div class="fw-semibold">Your Application</div>
+
+        {% if candidate.approved %}
+          <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle rounded-pill px-3 py-2">
+            Approved ✅
+          </span>
+        {% else %}
+          <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-3 py-2">
+            Pending Approval ⏳
+          </span>
+        {% endif %}
+      </div>
+
+      {% if form.errors %}
+        <div class="alert alert-danger py-2">Please fix the errors below.</div>
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label">Party</label>
+            {{ form.party }}
+            <div class="text-danger small">{{ form.party.errors }}</div>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <label class="form-label">Class</label>
+            {{ form.class_name }}
+            <div class="text-danger small">{{ form.class_name.errors }}</div>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <label class="form-label">Section</label>
+            {{ form.section }}
+            <div class="text-danger small">{{ form.section.errors }}</div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label">Slot</label>
+            {{ form.slot }}
+            <div class="text-danger small">{{ form.slot.errors }}</div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label class="form-label">Photo</label>
+            {{ form.photo }}
+            <div class="text-danger small">{{ form.photo.errors }}</div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Manifesto</label>
+            {{ form.manifesto }}
+            <div class="text-danger small">{{ form.manifesto.errors }}</div>
+          </div>
+        </div>
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-warning mt-3 py-2">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <button class="btn btn-success mt-3">Save Changes</button>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

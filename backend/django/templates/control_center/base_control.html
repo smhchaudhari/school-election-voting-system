@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block navbar %}{% endblock %}
+{% block title %}Control Centre | GreenVote{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <style>
+    /* Shared Control Centre styling (same vibe as your site) */
+    .cc-wrap{
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(25,135,84,.10), transparent 60%),
+        radial-gradient(900px 500px at 80% 20%, rgba(46,204,113,.10), transparent 55%);
+      border-radius: 18px;
+      padding: 22px;
+    }
+    .cc-card{
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 16px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.06);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(6px);
+    }
+    .cc-side{
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 26px rgba(0,0,0,.05);
+      overflow: hidden;
+    }
+    .cc-link{
+      display:flex; align-items:center; gap:10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color:#0f5132;
+      text-decoration:none;
+    }
+    .cc-link i{ font-size: 1.05rem; opacity:.85; }
+    .cc-link:hover{ background: rgba(25,135,84,.08); color:#0f5132; }
+    .cc-link.active{ background: rgba(25,135,84,.14); font-weight: 700; }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="cc-wrap">
+
+  
+  <div class="cc-card p-4 mb-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <span class="brand-dot"></span>
+          <h3 class="m-0" style="color:#0f5132;">Control Centre</h3>
+        </div>
+        <div class="text-muted">School authority dashboard for managing election activities.</div>
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap align-items-center">
+
+        <span class="badge rounded-pill text-bg-success">
+          <i class="bi bi-shield-lock-fill me-1"></i> Admin Mode
+        </span>
+
+        <span class="small text-muted d-none d-md-inline">
+          Hi, <span class="fw-semibold text-dark">{{ user.username }}</span>
+        </span>
+
+        <a class="btn btn-outline-success rounded-pill px-3"
+            href="{% url 'control_center:dashboard_home' %}">
+          Dashboard
+        </a>
+
+        <a class="btn btn-outline-success rounded-pill px-3"
+            href="{% url 'control_center:live_monitor' %}">
+          Live Monitor
+        </a>
+
+        <form method="post" action="{% url 'logout' %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger rounded-pill px-3">
+            <i class="bi bi-box-arrow-right me-1"></i> Logout
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Sidebar -->
+    <div class="col-12 col-lg-3">
+      <div class="cc-side p-3">
+        <div class="fw-semibold mb-2" style="color:#0f5132;">Navigation</div>
+
+        <a class="cc-link {% if request.path == '/control/' %}active{% endif %}"
+           href="{% url 'control_center:dashboard_home' %}">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <a class="cc-link {% if '/control/election/' in request.path %}active{% endif %}"
+           href="{% url 'control_center:election_manage' %}">
+          <i class="bi bi-calendar3"></i> Election
+        </a>
+
+        <a class="cc-link {% if '/control/parties/' in request.path %}active{% endif %}"
+           href="{% url 'control_center:parties_manage' %}">
+          <i class="bi bi-diagram-3"></i> Parties
+        </a>
+
+        <a class="cc-link {% if '/control/candidates/' in request.path %}active{% endif %}"
+           href="{% url 'control_center:candidates_approval' %}">
+          <i class="bi bi-person-badge"></i> Candidates
+        </a>
+
+        <a class="cc-link {% if '/control/voters/' in request.path %}active{% endif %}"
+           href="{% url 'control_center:voters_list' %}">
+          <i class="bi bi-people"></i> Voters
+        </a>
+
+        <a class="cc-link {% if '/control/live/' in request.path %}active{% endif %}"
+           href="{% url 'control_center:live_monitor' %}">
+          <i class="bi bi-graph-up"></i> Live Monitor
+        </a>
+
+        <a class="cc-link {% if '/control/reports/' in request.path %}active{% endif %}"
+           href="{% url 'control_center:reports_home' %}">
+          <i class="bi bi-file-earmark-text"></i> Reports
+        </a>
+
+        <hr class="my-3">
+
+        <a class="cc-link" href="{% url 'elections:status' %}">
+          <i class="bi bi-box-arrow-up-right"></i> Open Election Hub
+        </a>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-9">
+      {% block cc_content %}{% endblock %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

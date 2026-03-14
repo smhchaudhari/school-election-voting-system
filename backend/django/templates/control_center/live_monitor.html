@@ -1,0 +1,82 @@
+{% extends "control_center/base_control.html" %}
+{% block title %}Live Monitor | GreenVote{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <meta http-equiv="refresh" content="10">
+{% endblock %}
+
+{% block cc_content %}
+<div class="cc-wrap">
+
+  <div class="cc-card p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <h3 style="color:#0f5132;" class="mb-1">Live Election Monitor</h3>
+        <div class="text-muted">Auto-refreshes every 10 seconds</div>
+      </div>
+
+      <a href="{% url 'control_center:dashboard_home' %}"
+         class="btn btn-outline-success rounded-pill px-3">
+         Back to Dashboard
+      </a>
+    </div>
+  </div>
+
+  {% if election %}
+
+    <div class="cc-card p-4 mb-4">
+      <h5 class="mb-3">{{ election.title }}</h5>
+      <div class="text-muted mb-3">Current Phase: {{ phase }}</div>
+
+      <div class="row text-center">
+        <div class="col-md-4">
+          <div class="fw-semibold">Total Voters</div>
+          <div class="fs-4 text-success">{{ total_voters }}</div>
+        </div>
+        <div class="col-md-4">
+          <div class="fw-semibold">Votes Cast</div>
+          <div class="fs-4 text-success">{{ votes_cast }}</div>
+        </div>
+        <div class="col-md-4">
+          <div class="fw-semibold">Turnout</div>
+          <div class="fs-4 text-success">{{ turnout }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-card p-4">
+      <h5 class="mb-3">Party Vote Count</h5>
+
+      {% if party_counts %}
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Party</th>
+              <th class="text-end">Votes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for party in party_counts %}
+            <tr>
+              <td>{{ party.party__name }}</td>
+              <td class="text-end fw-bold">{{ party.total }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="alert alert-light">
+          No votes recorded yet.
+        </div>
+      {% endif %}
+    </div>
+
+  {% else %}
+    <div class="alert alert-info">
+      No active election found.
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

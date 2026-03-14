@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Results Not Ready{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded shadow-sm p-4">
+  <h3>{{ election.title }}</h3>
+
+  <div class="alert alert-warning mt-3">
+    Results will be available after the election ends.
+  </div>
+
+  <p class="mb-0">
+    <strong>Election ends at:</strong> {{ election.end_time }}
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,239 @@
+{% with pv=phase_value %}
+<section class="py-4">
+
+  <div class="row align-items-stretch g-4 mb-4">
+
+    <div class="col-12 col-lg-8">
+      <div class="p-4 p-lg-5 rounded-4 shadow-sm bg-white h-100">
+
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+          <span class="badge rounded-pill text-bg-success-subtle border border-success-subtle px-3 py-2">
+            Election Hub
+          </span>
+
+          {% if role %}
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">
+              Logged in as: <strong>{{ role }}</strong>
+            </span>
+          {% endif %}
+
+          {% if election %}
+            <span class="badge rounded-pill text-bg-success-subtle border border-success-subtle px-3 py-2">
+              Current Phase: <strong>{{ pv }}</strong>
+            </span>
+          {% endif %}
+        </div>
+
+        <h1 class="display-6 fw-semibold mb-2">Know what’s happening right now</h1>
+
+        {% if pv == "NO_ELECTION" or not election %}
+          <p class="lead text-secondary mb-0">
+            No active election yet. Once an admin schedules an election, this page will guide students through each stage.
+          </p>
+        {% elif pv == "CANDIDATE" or pv == "CANDIDATE_REGISTRATION" or pv == "REGISTRATION" %}
+          <p class="lead text-secondary mb-0">
+            Candidate registration is <strong>OPEN</strong>. Eligible students can submit their profile and manifesto for approval.
+          </p>
+        {% elif pv == "VOTING" or pv == "VOTING_PERIOD" %}
+          <p class="lead text-secondary mb-0">
+            Voting is <strong>LIVE</strong>. Students can vote for their party during the scheduled window.
+          </p>
+        {% elif pv == "RESULTS" or pv == "COMPLETED" or pv == "ENDED" %}
+          <p class="lead text-secondary mb-0">
+            Results are <strong>AVAILABLE</strong>. View the winning party and vote distribution.
+          </p>
+        {% else %}
+          <p class="lead text-secondary mb-0">
+            The election is in progress. Your available actions depend on the current stage.
+          </p>
+        {% endif %}
+
+        <hr class="my-4">
+
+        <div class="d-flex flex-wrap gap-2">
+          <span class="badge rounded-pill px-3 py-2 {% if pv == "CANDIDATE" or pv == "CANDIDATE_REGISTRATION" or pv == "REGISTRATION" %}text-bg-success{% else %}text-bg-light border{% endif %}">
+            1) Candidate Registration
+          </span>
+          <span class="badge rounded-pill px-3 py-2 {% if pv == "VOTING" or pv == "VOTING_PERIOD" %}text-bg-success{% else %}text-bg-light border{% endif %}">
+            2) Voting
+          </span>
+          <span class="badge rounded-pill px-3 py-2 {% if pv == "RESULTS" or pv == "COMPLETED" or pv == "ENDED" %}text-bg-success{% else %}text-bg-light border{% endif %}">
+            3) Results
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="p-4 rounded-4 shadow-sm bg-white h-100 d-flex flex-column justify-content-between">
+        <div>
+          <h5 class="fw-semibold mb-2">Quick actions</h5>
+          <p class="text-secondary mb-3">Shortcuts based on election stage.</p>
+
+          <div class="d-grid gap-2">
+            <a class="btn btn-outline-success btn-lg" href="/status/">
+              Refresh Status
+            </a>
+
+            {% if role == "ADMIN" %}
+              <a class="btn btn-success btn-lg" href="/admin/">
+                Open Admin Panel
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <small class="text-secondary mt-3">
+          Tip: This page updates automatically as the election moves through phases.
+        </small>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="p-4 p-lg-5 rounded-4 shadow-sm bg-white mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div>
+        <h4 class="fw-semibold mb-1">Choose how you want to participate</h4>
+        <p class="text-secondary mb-0">
+          One account for everyone. After login, pick a mode based on what’s currently open.
+        </p>
+      </div>
+
+      
+      {% if not user.is_authenticated %}
+        <a class="btn btn-success btn-lg px-4" href="{% url 'login' %}">
+          Sign in to continue
+        </a>
+      {% endif %}
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row g-4">
+
+      
+      <div class="col-12 col-lg-6">
+        <div class="p-4 rounded-4 border bg-light h-100">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge rounded-pill text-bg-success-subtle border border-success-subtle px-3 py-2">
+              Candidate Mode
+            </span>
+          </div>
+
+          <h5 class="fw-semibold mb-2">Continue as Candidate</h5>
+          <p class="text-secondary mb-3">
+            Submit your profile and manifesto during the registration window.
+          </p>
+
+          {% if not user.is_authenticated %}
+            <button class="btn btn-outline-secondary w-100" disabled>
+              Login required
+            </button>
+
+          {% elif pv == "CANDIDATE" or pv == "CANDIDATE_REGISTRATION" or pv == "REGISTRATION" %}
+            
+            <a class="btn btn-success w-100" href="{% url 'candidate:apply' %}">
+              Continue as Candidate
+            </a>
+
+
+            <small class="text-secondary d-block mt-2">
+              Registration is open — you can proceed now.
+            </small>
+
+          {% else %}
+            <button class="btn btn-outline-secondary w-100" disabled>
+              Registration closed
+            </button>
+            <small class="text-secondary d-block mt-2">
+              Candidate registration opens only during the registration phase.
+            </small>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="p-4 rounded-4 border bg-light h-100">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge rounded-pill text-bg-success-subtle border border-success-subtle px-3 py-2">
+              Voter Mode
+            </span>
+          </div>
+
+          <h5 class="fw-semibold mb-2">Continue as Voter</h5>
+          <p class="text-secondary mb-3">
+            Vote only during the official voting window. Results appear after voting ends.
+          </p>
+
+          {% if not user.is_authenticated %}
+             <button class="btn btn-outline-secondary w-100" disabled>
+              Login required
+            </button>
+
+          {% else %}
+
+            {% if pv == "VOTING" or pv == "VOTING_PERIOD" %}
+              {% if election %}
+                <a class="btn btn-success w-100" href="{% url 'voter:voter_profile' %}">
+                  Continue as Voter
+                </a>
+
+                <small class="text-secondary d-block mt-2">
+                  Voting is live — your vote is party-based.
+                </small>
+              {% else %}
+                <button class="btn btn-outline-secondary w-100" disabled>
+                  Voting not available yet
+                </button>
+                <small class="text-secondary d-block mt-2">
+                  Election not set.
+                </small>
+              {% endif %}
+
+            {% elif pv == "RESULTS" or pv == "COMPLETED" or pv == "ENDED" %}
+              {% if election %}
+                <a class="btn btn-outline-success w-100" href="/results/{{ election.id }}/">
+                  View Results
+                </a>
+                <small class="text-secondary d-block mt-2">
+                  Voting has ended — results are available.
+                </small>
+              {% else %}
+                <button class="btn btn-outline-secondary w-100" disabled>
+                  Results not available
+                </button>
+                <small class="text-secondary d-block mt-2">
+                  Election not set.
+                </small>
+              {% endif %}
+
+            {% else %}
+              <button class="btn btn-outline-secondary w-100" disabled>
+                Voting not available yet
+              </button>
+              <small class="text-secondary d-block mt-2">
+                Voting opens only during the voting phase.
+              </small>
+            {% endif %}
+
+          {% endif %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% if role == "ADMIN" %}
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-success btn-lg px-4" href="/admin/">
+        Go to Admin Panel
+      </a>
+    </div>
+  {% endif %}
+
+</section>
+{% endwith %}

@@ -1,0 +1,167 @@
+{% extends "control_center/base_control.html" %}
+{% block title %}Election | Control Centre{% endblock %}
+
+{% block cc_content %}
+<div class="cc-wrap">
+
+  <div class="cc-card p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h3 class="mb-1" style="color:#0f5132;">
+          {% if create_mode %}Create New Election{% else %}Election Management{% endif %}
+        </h3>
+        {% if create_mode %}
+          <div class="text-muted">Create a new election schedule and settings.</div>
+        {% else %}
+          <div class="text-muted">Edit election schedule and manage election settings.</div>
+        {% endif %}
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'control_center:election_manage' %}?create=1"
+           class="btn btn-success rounded-pill px-3">
+          + Create New
+        </a>
+        <a href="{% url 'control_center:dashboard_home' %}" class="btn btn-outline-success rounded-pill px-3">
+          Back
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  {% if not create_mode and election %}
+    <div class="cc-card p-4 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+          <div class="fw-semibold" style="font-size:18px;">
+            {{ election.title }}
+            {% if active and active.id == election.id %}
+              <span class="badge text-bg-success ms-2">Active</span>
+            {% endif %}
+          </div>
+          <div class="text-muted">
+            Current Phase: <span class="fw-semibold">{{ phase }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+
+  <div class="cc-card p-4 mb-4">
+    <form method="post" class="row g-3">
+      {% csrf_token %}
+
+      
+      <input type="hidden" name="action" value="{% if create_mode %}create{% else %}save{% endif %}">
+
+      {% if not create_mode and election %}
+        <input type="hidden" name="election_id" value="{{ election.id }}">
+      {% endif %}
+
+      <div class="col-12">
+        <label class="form-label small text-muted">Election Title</label>
+        <input type="text" class="form-control" name="title"
+               value="{% if election %}{{ election.title }}{% endif %}"
+               placeholder="e.g., Student Council Election 2026">
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small text-muted">Candidate Start</label>
+        <input type="datetime-local" class="form-control" name="candidate_start"
+               value="{% if election %}{{ election.candidate_start|date:'Y-m-d\\TH:i' }}{% endif %}">
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small text-muted">Candidate End</label>
+        <input type="datetime-local" class="form-control" name="candidate_end"
+               value="{% if election %}{{ election.candidate_end|date:'Y-m-d\\TH:i' }}{% endif %}">
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small text-muted">Voting Start</label>
+        <input type="datetime-local" class="form-control" name="voting_start"
+               value="{% if election %}{{ election.voting_start|date:'Y-m-d\\TH:i' }}{% endif %}">
+      </div>
+
+      <div class="col-12 col-md-6">
+        <label class="form-label small text-muted">Voting End</label>
+        <input type="datetime-local" class="form-control" name="voting_end"
+               value="{% if election %}{{ election.voting_end|date:'Y-m-d\\TH:i' }}{% endif %}">
+      </div>
+
+      <div class="col-12 d-flex flex-wrap gap-2">
+        <button type="submit" class="btn btn-success rounded-pill px-4">
+          {% if create_mode %}Create Election{% else %}Save Changes{% endif %}
+        </button>
+
+        <a href="{% url 'control_center:live_monitor' %}" class="btn btn-outline-success rounded-pill px-4">
+          Open Live Monitor
+        </a>
+      </div>
+    </form>
+  </div>
+
+  
+  <div class="cc-card p-0 overflow-hidden">
+    <div class="p-4 border-bottom">
+      <div class="fw-semibold" style="color:#0f5132;">Existing Elections</div>
+      <div class="text-muted small">Set an election as active or edit it.</div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Election</th>
+            <th>Phase</th>
+            <th>Voting Window</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for e in elections %}
+            <tr>
+              <td class="fw-semibold">
+                {{ e.title }}
+                {% if active and active.id == e.id %}
+                  <span class="badge text-bg-success ms-2">Active</span>
+                {% endif %}
+              </td>
+
+              <td class="text-muted">{{ e.phase }}</td>
+
+              <td class="text-muted">
+                {{ e.voting_start|date:"d-m-Y H:i" }} → {{ e.voting_end|date:"d-m-Y H:i" }}
+              </td>
+
+              <td class="text-end">
+                <form method="post" action="{% url 'control_center:set_active_election' %}" class="d-inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="election_id" value="{{ e.id }}">
+                  <button class="btn btn-outline-success btn-sm rounded-pill px-3" type="submit">
+                    Set Active
+                  </button>
+                </form>
+
+                <a href="{% url 'control_center:election_manage' %}?edit={{ e.id }}"
+                   class="btn btn-outline-secondary btn-sm rounded-pill px-3 ms-1">
+                  Edit
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted p-4">No elections created yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

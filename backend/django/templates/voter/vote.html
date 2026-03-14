@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Vote{% endblock %}
+
+{% block content %}
+<div class="container py-4 vote-wrap">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+        <div>
+            <div class="d-inline-flex align-items-center gap-2 small text-success-emphasis">
+                <span class="dot-online"></span>
+                <span>Party Voting</span>
+            </div>
+            <h1 class="h3 mt-1 mb-1 fw-semibold">Choose your party</h1>
+            <p class="text-muted mb-0">
+                Select <span class="fw-semibold">one</span> party and confirm your vote.
+            </p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <a href="{% url 'home' %}" class="btn btn-outline-success btn-sm">
+                Back to Home
+            </a>
+            <a href="{% url 'status' %}" class="btn btn-success btn-sm">
+                Status
+            </a>
+        </div>
+    </div>
+
+    {% if messages %}
+    <div class="mb-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mb-2 py-2">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if election %}
+    <div class="card shadow-sm border-0 vote-card mb-3">
+        <div class="card-body p-3 p-md-4">
+            <div class="d-flex flex-wrap align-items-start justify-content-between gap-3">
+                <div>
+                    <div class="small text-muted">Election</div>
+                    <div class="fw-semibold">{{ election.title|default:"School Election" }}</div>
+                    {% if election.start_date and election.end_date %}
+                    <div class="small text-muted">
+                        {{ election.start_date }} – {{ election.end_date }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if role %}
+                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle rounded-pill px-3 py-2">
+                    Logged in as: {{ role }}
+                </span>
+                {% endif %}
+            </div>
+
+            <hr class="my-3">
+
+            <form method="post" class="vote-form">
+                {% csrf_token %}
+
+                {% if parties %}
+                <div class="row g-3">
+                    {% for party in parties %}
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label class="party-tile w-100">
+                            <input class="party-radio" type="radio" name="party" value="{{ party.id }}" required />
+
+                            <div class="party-card h-100">
+                                <div class="d-flex align-items-start justify-content-between gap-2">
+                                    <div>
+                                        <div class="party-name">{{ party.name }}</div>
+                                        {% if party.tagline %}
+                                        <div class="party-tagline">{{ party.tagline }}</div>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if party.symbol %}
+                                    <div class="party-symbol">
+                                        {{ party.symbol }}
+                                    </div>
+                                    {% else %}
+                                    <div class="party-symbol muted">
+                                        ?
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                {% if party.description %}
+                                <div class="party-desc mt-4">
+                                    {{ party.description }}
+                                </div>
+                                {% endif %}
+
+                                <div class="party-footer mt-4 d-flex align-items-center justify-content-between">
+                                    <span class="small text-muted">Tap to select</span>
+                                    <span class="select-chip">Select</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mt-4">
+                    <div class="small text-muted">
+                        Once submitted, you can’t vote again.
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg px-4">
+                        Confirm Vote
+                    </button>
+                </div>
+
+                {% else %}
+                <div class="text-center py-4">
+                    <div class="h5 mb-1">No parties available</div>
+                    <div class="text-muted">Ask the admin to add parties for this election.</div>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="card shadow-sm border-0 vote-card">
+        <div class="card-body p-4 text-center">
+            <div class="h5 mb-1">No active election</div>
+            <div class="text-muted mb-3">Please check status or come back later.</div>
+            <a href="{% url 'status' %}" class="btn btn-success">Go to Status</a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<style>
+    /* --- Compact, clean, green --- */
+    .vote-wrap { padding-top: 18px; padding-bottom: 18px; }
+    .vote-card { border-radius: 20px; }
+    .dot-online {
+        width: 10px; height: 10px; border-radius: 50%;
+        background: #22c55e; box-shadow: 0 0 0 4px rgba(34,197,94,.15);
+        display: inline-block;
+    }
+    .party-tile { cursor: pointer; user-select: none; }
+    .party-radio { position: absolute; opacity: 0; pointer-events: none; }
+    .party-card {
+        border: 1px solid rgba(16,185,129,.25);
+        background: rgba(255,255,255,.92);
+        border-radius: 18px;
+        padding: 14px 14px;
+        transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+        box-shadow: 0 12px 25px rgba(16,24,40,.06);
+    }
+    .party-name {
+        font-weight: 700;
+        font-size: 1.06rem;
+        color: #0f172a;
+        letter-spacing: .2px;
+    }
+    .party-tagline {
+        font-size: .9rem;
+        color: rgba(15,23,42,.65);
+        margin-top: 2px;
+    }
+    .party-desc {
+        font-size: .92rem;
+        color: rgba(15,23,42,.75);
+        line-height: 1.35;
+    }
+    .party-symbol {
+        min-width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        background: rgba(16,185,129,.12);
+        color: rgba(6,95,70,1);
+        border: 1px solid rgba(16,185,129,.25);
+    }
+    .party-symbol.muted {
+        background: rgba(2,132,199,.08);
+        border-color: rgba(2,132,199,.18);
+        color: rgba(2,132,199,.9);
+    }
+    .select-chip {
+        font-size: .82rem;
+        font-weight: 700;
+        padding: .28rem .65rem;
+        border-radius: 999px;
+        border: 1px solid rgba(16,185,129,.35);
+        color: rgba(6,95,70,1);
+        background: rgba(16,185,129,.10);
+    }
+    .party-tile:hover .party-card {
+        transform: translateY(-2px);
+        border-color: rgba(16,185,129,.45);
+        box-shadow: 0 18px 35px rgba(16,24,40,.10);
+    }
+    .party-radio:checked + .party-card {
+        border-color: rgba(16,185,129,.85);
+        box-shadow: 0 18px 40px rgba(16,185,129,.18);
+        background: rgba(240,253,244,.95);
+    }
+    .party-radio:checked + .party-card .select-chip {
+        background: rgba(16,185,129,.18);
+        border-color: rgba(16,185,129,.55);
+    }
+    .btn-lg {
+        padding: .55rem 1.05rem;
+        font-size: 1rem;
+        border-radius: 14px;
+    }
+</style>
+
+<script>
+{% if messages %}
+    {% for message in messages %}
+        alert("{{ message }}");
+    {% endfor %}
+{% endif %}
+</script>
+{% endblock %}
