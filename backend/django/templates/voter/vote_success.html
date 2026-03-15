@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Vote Successful{% endblock %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh;">
+
+    <div class="card text-center shadow-lg p-5" style="max-width:500px; width:100%; border-radius:15px;">
+
+        <div class="mb-4">
+            <div style="font-size:60px; color:green;">
+                ✓
+            </div>
+        </div>
+
+        <h2 class="text-success mb-3">Vote Submitted Successfully!</h2>
+
+        <p class="text-muted mb-4">
+            Thank you for participating in the election.  
+            Your vote has been securely recorded.
+        </p>
+
+        <div class="d-grid gap-3">
+
+            <a href="{% url 'election_hub' %}" class="btn btn-primary btn-lg">
+                Go to Election Hub
+            </a>
+
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                Go to Home
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

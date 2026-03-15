@@ -67,7 +67,7 @@ def vote_page(request, election_id):
         result.save()
             
         messages.success(request, "Vote submitted successfully!")
-        return redirect("voting:already_voted")
+        return redirect("voter/vote_success.html")
 
     return render(request, "voter/vote.html", {
         "election": election,
