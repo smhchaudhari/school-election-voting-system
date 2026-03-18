@@ -21,7 +21,7 @@ def vote_page(request, election_id):
         return redirect("status")
 
     now = timezone.now()
-    if now < election.start_time or now > election.end_time:
+    if now < election.start_time:
         return render(request, "voting/not_active.html", {"election": election})
 
     if timezone.now() > election.end_time:
@@ -46,7 +46,7 @@ def vote_page(request, election_id):
         party_id = request.POST.get("party")
 
         if not party_id:
-            messages.error(request, "please select a party.")
+            messages.error(request, "Please select a party.")
             return redirect(request.path)
         
         selected_party = get_object_or_404(Party, id=party_id, election=election)
@@ -67,7 +67,7 @@ def vote_page(request, election_id):
         result.save()
             
         messages.success(request, "Vote submitted successfully!")
-        return redirect("voter/vote_success.html")
+        return redirect("vote_success")
 
     return render(request, "voter/vote.html", {
         "election": election,
