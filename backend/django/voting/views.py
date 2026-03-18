@@ -78,3 +78,7 @@ def vote_page(request, election_id):
 def already_voted(request):
     return render(request, "voter/already_voted.html")
 
+@login_required
+def vote_success(request):
+    return render(request, 'voter/vote_success.html')
+
